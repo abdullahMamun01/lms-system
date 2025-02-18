@@ -1,12 +1,15 @@
 import AppError from "../errors/AppError";
-import { ILogin } from "../interfaces/auth.interface";
-import userModel from "../models/user.model";
+import { ILogin, IRegister } from "../interfaces/auth.interface";
+
 import httpStatus from "http-status";
-import { verifyPassword } from "../utils/bcrypt";
+import { hashPassword, verifyPassword } from "../utils/bcrypt";
 import { generateToken } from "../utils/jwt";
+import { convertObjectIdToId } from "../utils/convertObjectId";
+import UserModel from "../models/user.model";
 
 const loginUser = async (payload: ILogin) => {
-  const user = await userModel.findOne({ email: payload.email });
+  const user = await UserModel.findOne({ email: payload.email }).lean();
+  console.log({user})
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
@@ -21,11 +24,25 @@ const loginUser = async (payload: ILogin) => {
 
   return {
     accessToken: token,
-    user,
+    user: convertObjectIdToId(user),
   };
 };
 
-const registerUser = () => {};
+const registerUser = async (payload: IRegister) => {
+
+  const user = await UserModel.findOne({ email: payload.email }).lean();
+  if (user) {
+    throw new AppError(httpStatus.CONFLICT, "User already exists");
+  }
+
+  const hashedPassword = await hashPassword(payload.password);
+  console.log({hashedPassword})
+  const savedUser = await UserModel.create({
+    ...payload,
+    password: hashedPassword,
+  });
+  return convertObjectIdToId(savedUser.toObject());
+};
 
 export const AUthServices = {
   loginUser,
