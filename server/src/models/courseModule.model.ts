@@ -3,7 +3,7 @@ import { IModule } from "../interfaces/courseModule.interface";
 
 const moduleSchema = new Schema<IModule>(
   {
-    course: { type: Schema.Types.ObjectId, ref: "Course" },
+    course: { type: Schema.Types.ObjectId, ref: "Course" , required: true },
     title: { type: String, required: true },
     lectures: [{ type: Schema.Types.ObjectId, ref: "Lecture" }],
     isDeleted: { type: Boolean, default: false },

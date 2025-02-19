@@ -8,6 +8,7 @@ import {
   convertObjectIdToId,
 } from "../utils/convertObjectId";
 
+const select = "-createdAt -updatedAt -isDeleted -isPublished";
 const getCourses = async (query: Record<string, any>) => {
   const { limit = 10, page = 1, search = "" } = query;
   const skip = (+page - 1) * Number(limit);
@@ -18,12 +19,13 @@ const getCourses = async (query: Record<string, any>) => {
     })
     .limit(limit)
     .skip(skip)
+    .select(select)
     .lean();
   return convertArrayIdToId(courses);
 };
 
 const getCourseById = async (courseId: string) => {
-  const course = await courseModel.findById(courseId).lean();
+  const course = await courseModel.findById(courseId).select(select).lean();
   if (!course) {
     throw new AppError(httpStatus.NOT_FOUND, "Course not found");
   }
@@ -46,7 +48,7 @@ const updateCourse = async (courseId: string, payload: Partial<ICourse>) => {
     throw new AppError(httpStatus.NOT_FOUND, "Course not found");
   }
   const updatedCourse = await courseModel
-    .findByIdAndUpdate(courseId, payload)
+    .findByIdAndUpdate(courseId, payload, { new: true, runValidators: true })
     .lean();
 
   return convertObjectIdToId(updatedCourse);

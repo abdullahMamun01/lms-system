@@ -22,7 +22,7 @@ const loginUser = async (payload: ILogin) => {
     { id: user._id, email: user.email, role: user.role },
     config.accessTokenSecret  as string
   );
-  console.log(token)
+
   return {
     accessToken: token,
     user : convertObjectIdToId(user),

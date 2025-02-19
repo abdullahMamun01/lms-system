@@ -57,7 +57,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
   }
-
+  
    
   return res.status(statusCode).json({
     message,
