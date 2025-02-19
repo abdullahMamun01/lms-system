@@ -6,10 +6,11 @@ import { hashPassword, verifyPassword } from "../utils/bcrypt";
 import { generateToken } from "../utils/jwt";
 import { convertObjectIdToId } from "../utils/convertObjectId";
 import UserModel from "../models/user.model";
+import config from "../config";
 
 const loginUser = async (payload: ILogin) => {
   const user = await UserModel.findOne({ email: payload.email }).lean();
-  console.log({user})
+
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
@@ -19,12 +20,12 @@ const loginUser = async (payload: ILogin) => {
   }
   const token = generateToken(
     { id: user._id, email: user.email, role: user.role },
-    process.env.JWT_SECRET as string
+    config.accessTokenSecret  as string
   );
-
+  console.log(token)
   return {
     accessToken: token,
-    user: convertObjectIdToId(user),
+    user : convertObjectIdToId(user),
   };
 };
 
@@ -36,7 +37,7 @@ const registerUser = async (payload: IRegister) => {
   }
 
   const hashedPassword = await hashPassword(payload.password);
-  console.log({hashedPassword})
+
   const savedUser = await UserModel.create({
     ...payload,
     password: hashedPassword,

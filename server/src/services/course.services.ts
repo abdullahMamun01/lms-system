@@ -28,10 +28,9 @@ const getCourseById = async (courseId: string) => {
     throw new AppError(httpStatus.NOT_FOUND, "Course not found");
   }
   const modules = await courseModuleModel
-    .findById(courseId)
+    .find({ course: courseId })
     .populate("lectures")
     .lean();
-
   return { ...course, modules };
 };
 

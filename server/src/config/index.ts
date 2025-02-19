@@ -1,7 +1,7 @@
-import dotenv from 'dotenv';
-import path from 'path';
+import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config({ path: path.join((process.cwd(), '.env')) });
+dotenv.config({ path: path.join((process.cwd(), ".env")) });
 
 export default {
   port: Number(process.env.PORT),
@@ -14,4 +14,8 @@ export default {
   stipe_secret_key: process.env.STRIPE_SECRET_KEY,
   stipe_public_key: process.env.STRIPE_PUBLIC_KEY,
   client_public_domain: process.env.CLIENT_PUBLIC_DOMAIN,
+
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 };
