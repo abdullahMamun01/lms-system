@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IModule } from "../interfaces/module.interface";
+import { IModule } from "../interfaces/courseModule.interface";
 
 const moduleSchema = new Schema<IModule>(
   {
@@ -11,3 +11,4 @@ const moduleSchema = new Schema<IModule>(
 );
 
 export default mongoose.model<IModule>("Module", moduleSchema);
+/* course ---> module ---> lecture */

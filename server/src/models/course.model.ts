@@ -7,6 +7,8 @@ const courseSchema = new Schema<ICourse>(
     title: { type: String, required: true },
     price: { type: Number, required: true },
     description: { type: String, required: true },
+    isDeleted: { type: Boolean, default: false },
+    isPublished: { type: Boolean, default: false },
   },
   { timestamps: true, versionKey: false }
 );
