@@ -6,7 +6,7 @@ const lectureSchema = new Schema<ILecture>(
     module: { type: Schema.Types.ObjectId, ref: "Module", required: true },
     title: { type: String, required: true },
     videoUrl: { type: String, required: true },
-    pdfNotes: [{ type: String }],
+    pdfNotes: [{ type: String  , required: false}],
     isComplete: { type: Boolean, default: false },
   },
   { timestamps: true }

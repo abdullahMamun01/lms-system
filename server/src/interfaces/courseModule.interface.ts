@@ -4,6 +4,7 @@ export interface IModule {
     course: Types.ObjectId;
     title: string;
     lectures: string[];
-    isDeleted?: boolean
+    isDeleted?: boolean,
+    moduleNumber: number
   }
   

@@ -3,6 +3,10 @@ import connectDB from "./config/db";
 import userRoutes from "./routes/user.routes";
 import authRoutes from "./routes/auth.routes";
 import courseRoutes from "./routes/course.routes";
+import moduleRoutes from "./routes/module.routes";
+import lectureRoutes from "./routes/lecture.routes";
+
+
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import notFound from "./middlewares/notFound";
 const app = express();
@@ -17,6 +21,8 @@ app.get("/", (req, res) => {
 });
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/courses", courseRoutes);
+app.use("/api/v1/modules", moduleRoutes);
+app.use("/api/v1/lectures", lectureRoutes);
 
 // app.use("/api/v1/users", userRoutes);
 

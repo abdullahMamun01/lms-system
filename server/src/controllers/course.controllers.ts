@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 import sendResponse from "../utils/sendResponse";
-import { uploadImage } from "../utils/uploadImage";
+
 import AppError from "../errors/AppError";
 import httpStatus from "http-status";
 import { CourseServices } from "../services/course.services";
+import { uploadSingleFile } from "../utils/uploadFile";
 
 const getAllCourse = catchAsync(async (req: Request, res: Response) => {
   const courses = await CourseServices.getCourses(req.query);
@@ -29,7 +30,7 @@ const getCouserById = catchAsync(async (req: Request, res: Response) => {
 const createCourse = catchAsync(async (req: Request, res: Response) => {
   const file = req.file;
   if (!file) throw new AppError(httpStatus.BAD_REQUEST, "File is required");
-  const thumbnail = (await uploadImage(req.file as Express.Multer.File))
+  const thumbnail = (await uploadSingleFile(req.file as Express.Multer.File))
     .secure_url;
   const course = await CourseServices.createCoures({ ...req.body, thumbnail });
   sendResponse(res, {

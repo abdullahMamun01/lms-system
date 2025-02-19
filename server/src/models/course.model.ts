@@ -13,4 +13,8 @@ const courseSchema = new Schema<ICourse>(
   { timestamps: true, versionKey: false }
 );
 
+courseSchema.pre("save",  async function (next) {
+  
+})
+
 export default mongoose.model<ICourse>("Course", courseSchema);

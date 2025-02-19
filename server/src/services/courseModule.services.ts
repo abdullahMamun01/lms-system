@@ -1,14 +1,26 @@
-
+import { Types } from "mongoose";
 import AppError from "../errors/AppError";
 import { IModule } from "../interfaces/courseModule.interface";
 import CourseModel from "../models/course.model";
 import CourseModuleModel from "../models/courseModule.model";
-import { convertArrayIdToId, convertObjectIdToId } from "../utils/convertObjectId";
+import {
+  convertArrayIdToId,
+  convertObjectIdToId,
+} from "../utils/convertObjectId";
 import httpStatus from "http-status";
 
+const getNextModuleNumber = async (
+  courseId: Types.ObjectId
+): Promise<number> => {
+  const lastModule = await CourseModuleModel.findOne({course: courseId })
+    .sort({ moduleNumber: -1 })
+    .select("moduleNumber");
+  return lastModule ? lastModule.moduleNumber + 1 : 1;
+};
+
 const getModules = async () => {
-    const modules = await CourseModuleModel.find().lean();
-    return convertArrayIdToId(modules);
+  const modules = await CourseModuleModel.find().lean();
+  return convertArrayIdToId(modules);
 };
 
 const getModuleById = async (moduleId: string) => {
@@ -21,15 +33,15 @@ const getModuleById = async (moduleId: string) => {
 };
 
 const createModule = async (payload: IModule) => {
-  if(!payload.course){
+  if (!payload.course) {
     throw new AppError(httpStatus.BAD_REQUEST, "Course is required");
   }
   const course = await CourseModel.findById(payload.course).lean();
   if (!course) {
     throw new AppError(httpStatus.NOT_FOUND, "Course not found");
   }
-
-  const module = await CourseModuleModel.create(payload);
+  const moduleNumber = await getNextModuleNumber(payload.course);
+  const module = await CourseModuleModel.create({ ...payload, moduleNumber });
   return convertObjectIdToId(module.toObject());
 };
 
