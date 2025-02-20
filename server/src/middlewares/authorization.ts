@@ -50,7 +50,7 @@ export const authoRization = (...requiredRole: TUserRole[]) => {
         "You have no access to this route"
       );
     }
-    const user = await UserModel.findById(authorizedUser.id).lean();
+    const user = await UserModel.findById(authorizedUser.userId).lean();
 
     if (!user) {
       throw new AppError(httpStatus.UNAUTHORIZED, "User not found");

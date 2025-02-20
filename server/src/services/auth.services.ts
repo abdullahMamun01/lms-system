@@ -19,7 +19,7 @@ const loginUser = async (payload: ILogin) => {
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid credentials");
   }
   const token = generateToken(
-    { id: user._id, email: user.email, role: user.role },
+    { userId: user._id, email: user.email, role: user.role },
     config.accessTokenSecret  as string
   );
 

@@ -1,8 +1,8 @@
 import { Types } from "mongoose";
 import AppError from "../errors/AppError";
-import { IModule } from "../interfaces/courseModule.interface";
+import { IModule } from "../interfaces/module.interface";
 import CourseModel from "../models/course.model";
-import CourseModuleModel from "../models/courseModule.model";
+import ModuleModel from "../models/module.model";
 import {
   convertArrayIdToId,
   convertObjectIdToId,
@@ -12,19 +12,19 @@ import httpStatus from "http-status";
 const getNextModuleNumber = async (
   courseId: Types.ObjectId
 ): Promise<number> => {
-  const lastModule = await CourseModuleModel.findOne({course: courseId })
+  const lastModule = await ModuleModel.findOne({course: courseId })
     .sort({ moduleNumber: -1 })
     .select("moduleNumber");
   return lastModule ? lastModule.moduleNumber + 1 : 1;
 };
 
 const getModules = async () => {
-  const modules = await CourseModuleModel.find().lean();
+  const modules = await ModuleModel.find().lean();
   return convertArrayIdToId(modules);
 };
 
 const getModuleById = async (moduleId: string) => {
-  const module = await CourseModuleModel.findById(moduleId).lean();
+  const module = await ModuleModel.findById(moduleId).lean();
 
   if (!module) {
     throw new AppError(httpStatus.NOT_FOUND, "Module not found");
@@ -41,17 +41,17 @@ const createModule = async (payload: IModule) => {
     throw new AppError(httpStatus.NOT_FOUND, "Course not found");
   }
   const moduleNumber = await getNextModuleNumber(payload.course);
-  const module = await CourseModuleModel.create({ ...payload, moduleNumber });
+  const module = await ModuleModel.create({ ...payload, moduleNumber });
   return convertObjectIdToId(module.toObject());
 };
 
 const updateModule = async (moduleId: string, payload: Partial<IModule>) => {
-  const module = await CourseModuleModel.findById(moduleId).lean();
+  const module = await ModuleModel.findById(moduleId).lean();
 
   if (!module) {
     throw new AppError(httpStatus.NOT_FOUND, "Module not found");
   }
-  const updatedModule = await CourseModuleModel.findByIdAndUpdate(
+  const updatedModule = await ModuleModel.findByIdAndUpdate(
     moduleId,
     payload,
     { new: true, runValidators: true }
@@ -61,13 +61,13 @@ const updateModule = async (moduleId: string, payload: Partial<IModule>) => {
 };
 
 const deletModule = async (moduleId: string) => {
-  const module = await CourseModuleModel.findById(moduleId).lean();
+  const module = await ModuleModel.findById(moduleId).lean();
 
   if (!module) {
     throw new AppError(httpStatus.NOT_FOUND, "Module not found");
   }
 
-  const deletedModule = await CourseModuleModel.findByIdAndUpdate(
+  const deletedModule = await ModuleModel.findByIdAndUpdate(
     moduleId,
     { isDeleted: true },
     { new: true, runValidators: true }
@@ -76,7 +76,7 @@ const deletModule = async (moduleId: string) => {
   return convertObjectIdToId(deletedModule);
 };
 
-export const CourseModuleServices = {
+export const ModuleServices = {
   getModules,
   getModuleById,
   createModule,

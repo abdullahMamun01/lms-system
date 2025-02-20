@@ -8,8 +8,8 @@ import {
   updateCourseSchema,
 } from "../validations/course.validation";
 import { authoRization } from "../middlewares/authorization";
-import { CourseModuleConroller } from "../controllers/courseModule.controller";
-import { courseModuleSchema } from "../validations/courserModule.validation";
+import { ModuleConroller } from "../controllers/module.controller";
+import { ModuleSchema } from "../validations/courserModule.validation";
 
 const router = express.Router();
 
@@ -18,6 +18,11 @@ const router = express.Router();
 router.get("/", CourseController.getAllCourse);
 
 router.get("/:courseId", CourseController.getCouserById);
+router.get(
+  "/:courseId/modules",
+  authoRization("USER", "ADMIN"),
+  CourseController.getModuleAndLecturesByCourseId
+);
 
 router.post(
   "/",
@@ -26,8 +31,6 @@ router.post(
   authoRization("ADMIN"),
   CourseController.createCourse
 );
-
-
 
 router.patch(
   "/:courseId",
@@ -45,10 +48,9 @@ router.delete(
 
 router.post(
   "/:courseId/modules",
-  validateRequest(courseModuleSchema),
+  validateRequest(ModuleSchema),
   authoRization("ADMIN"),
-  CourseModuleConroller.createModule
+  ModuleConroller.createModule
 );
-
 
 export default router;

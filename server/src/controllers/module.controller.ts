@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
-import { CourseModuleServices } from "../services/courseModule.services";
+import { ModuleServices } from "../services/module.services";
 import sendResponse from "../utils/sendResponse";
 
 const getAllModules = catchAsync(async (req: Request, res: Response) => {
-  const modules = await CourseModuleServices.getModules();
+  const modules = await ModuleServices.getModules();
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -14,7 +14,7 @@ const getAllModules = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getModuleById = catchAsync(async (req: Request, res: Response) => {
-  const module = await CourseModuleServices.getModuleById(req.params.moduleId);
+  const module = await ModuleServices.getModuleById(req.params.moduleId);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -25,7 +25,7 @@ const getModuleById = catchAsync(async (req: Request, res: Response) => {
 
 const createModule = catchAsync(async (req: Request, res: Response) => {
   const courseId = req.params.courseId;
-  const module = await CourseModuleServices.createModule({
+  const module = await ModuleServices.createModule({
     ...req.body,
     course: courseId,
   });
@@ -39,7 +39,7 @@ const createModule = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateModule = catchAsync(async (req: Request, res: Response) => {
-  const module = await CourseModuleServices.updateModule(
+  const module = await ModuleServices.updateModule(
     req.params.moduleId,
     req.body
   );
@@ -52,7 +52,7 @@ const updateModule = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteModule = catchAsync(async (req: Request, res: Response) => {
-  const module = await CourseModuleServices.deletModule(req.params.moduleId);
+  const module = await ModuleServices.deletModule(req.params.moduleId);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -61,7 +61,7 @@ const deleteModule = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const CourseModuleConroller = {
+export const ModuleConroller = {
   getAllModules,
   getModuleById,
   createModule,

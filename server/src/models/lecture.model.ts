@@ -7,9 +7,8 @@ const lectureSchema = new Schema<ILecture>(
     title: { type: String, required: true },
     videoUrl: { type: String, required: true },
     pdfNotes: [{ type: String  , required: false}],
-    isComplete: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true , versionKey: false}
 );
 
 export default mongoose.model<ILecture>("Lecture", lectureSchema);

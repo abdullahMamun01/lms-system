@@ -1,6 +1,6 @@
 import AppError from "../errors/AppError";
 import { ILecture } from "../interfaces/lecture.interface";
-import CourseModuleModel from "../models/courseModule.model";
+import ModuleModel from "../models/module.model";
 import LectureModel from "../models/lecture.model";
 import { convertObjectIdToId } from "../utils/convertObjectId";
 import httpStatus from "http-status";
@@ -8,7 +8,7 @@ import { uploadMultipleFiles } from "../utils/uploadFile";
 import mongoose from "mongoose";
 
 const getLecturesByModuleId = async (moduleId: string) => {
-  const module = await CourseModuleModel.findById(moduleId).lean();
+  const module = await ModuleModel.findById(moduleId).lean();
   if (!module) {
     throw new AppError(httpStatus.NOT_FOUND, "Module not found");
   }
@@ -32,13 +32,13 @@ const getAllLectures = async (query: Record<string, unknown>) => {
     filters["course"] = courseName;
   }
 
-  const course = await CourseModuleModel.findOne({
+  const course = await ModuleModel.findOne({
     title: {
       RegExp: new RegExp(courseName as string, "i"),
     },
   });
 
-  const lectures = await CourseModuleModel.findOne({
+  const lectures = await ModuleModel.findOne({
     course: course?._id,
     title: {
       RegExp: new RegExp(moduleName as string, "i"),
@@ -59,7 +59,7 @@ const createLecture = async (
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const module = await CourseModuleModel.findById(payload.module).session(
+    const module = await ModuleModel.findById(payload.module).session(
       session
     );
     if (!module) {
@@ -80,7 +80,7 @@ const createLecture = async (
       { session }
     );
     // Add lecture ID to module lectures array
-    module.lectures.push(lecture[0]._id.toString());
+    module.lectures.push(lecture[0]._id);
     await module.save({ session });
 
     await session.commitTransaction();
@@ -130,7 +130,7 @@ const deleteLecture = async (lectureId: string) => {
     _id: lectureId,
   }).lean();
 
-  await CourseModuleModel.findByIdAndUpdate(
+  await ModuleModel.findByIdAndUpdate(
     lecture.module,
     {
       $pull: {

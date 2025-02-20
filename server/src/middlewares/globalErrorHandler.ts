@@ -58,7 +58,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
     errorSources = simplifiedError?.errorSources;
   }
   
-   
+   console.log(err.message);
   return res.status(statusCode).json({
     message,
     statusCode: err.statusCode,

@@ -1,12 +1,16 @@
 import AppError from "../errors/AppError";
 import httpStatus from "http-status";
 import courseModel from "../models/course.model";
-import courseModuleModel from "../models/courseModule.model";
+import ModuleModel from "../models/module.model";
 import { ICourse } from "../interfaces/course.model";
 import {
   convertArrayIdToId,
   convertObjectIdToId,
 } from "../utils/convertObjectId";
+import { ILecture } from "../interfaces/lecture.interface";
+import WatchModel from "../models/watch.module";
+import { IModule } from "../interfaces/module.interface";
+import lectureModel from "../models/lecture.model";
 
 const select = "-createdAt -updatedAt -isDeleted -isPublished";
 const getCourses = async (query: Record<string, any>) => {
@@ -24,16 +28,57 @@ const getCourses = async (query: Record<string, any>) => {
   return convertArrayIdToId(courses);
 };
 
+const getCompletedLecturesMap = async (modules: any[], userId: string): Promise<Record<string, boolean>> => {
+  const watchModules = await WatchModel.find({
+    module: { $in: modules.map((m) => m._id) },
+    user: userId,
+    state: "COMPLETED",
+  }).lean();
+  return watchModules.reduce((map, { lecture }) => {
+    map[lecture.toString()] = true;
+    return map;
+  }, {} as Record<string, boolean>);
+};
+
+const updateLecturesWithCompletion = (lectures: any[], watchModuleMap: Record<string, boolean>) => {
+  return lectures.map((lecture) => ({
+    ...lecture,
+    completed: watchModuleMap[lecture._id.toString()] || false,
+  }));
+};
+
+const getModuleAndLecturesByCourseId = async (courseId: string, userId: string) => {
+  const course = await courseModel.findById(courseId).lean();
+  if (!course) {
+    throw new AppError(httpStatus.NOT_FOUND, "Course not found");
+  }
+
+  const modules = await ModuleModel.find({ course: courseId })
+    .populate({
+      path: "lectures",
+      select: "-createdAt -updatedAt -__v",
+    })
+    .select(select)
+    .lean();
+
+  const watchModuleMap = await getCompletedLecturesMap(modules, userId);
+
+  const updatedModules = modules.map((module) => ({
+    ...module,
+    lectures: updateLecturesWithCompletion(module.lectures, watchModuleMap),
+  }));
+
+  return updatedModules;
+};
+
+
 const getCourseById = async (courseId: string) => {
   const course = await courseModel.findById(courseId).select(select).lean();
   if (!course) {
     throw new AppError(httpStatus.NOT_FOUND, "Course not found");
   }
-  const modules = await courseModuleModel
-    .find({ course: courseId })
-    .populate("lectures")
-    .lean();
-  return { ...course, modules };
+
+  return convertObjectIdToId(course);
 };
 
 const createCoures = async (payload: ICourse) => {
@@ -77,4 +122,5 @@ export const CourseServices = {
   createCoures,
   updateCourse,
   deleteCourse,
+  getModuleAndLecturesByCourseId,
 };

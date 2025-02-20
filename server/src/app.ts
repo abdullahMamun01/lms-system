@@ -6,9 +6,11 @@ import courseRoutes from "./routes/course.routes";
 import moduleRoutes from "./routes/module.routes";
 import lectureRoutes from "./routes/lecture.routes";
 
-
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import notFound from "./middlewares/notFound";
+
+
+
 const app = express();
 
 // Middleware
@@ -28,7 +30,7 @@ app.use("/api/v1/lectures", lectureRoutes);
 
 // Error Handler
 app.use(globalErrorHandler);
-app.use(notFound);
+app.use(notFound)
 
 connectDB();
 app.listen(5000, () => {

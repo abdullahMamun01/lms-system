@@ -17,6 +17,19 @@ const getAllCourse = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getModuleAndLecturesByCourseId = catchAsync(
+  async (req: Request, res: Response) => {
+    const courseId = req.params.courseId;
+    const courses = await CourseServices.getModuleAndLecturesByCourseId(courseId , req.user.userId);
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "All lectures retrieved successfully",
+      data: courses,
+    });
+  }
+);
+
 const getCouserById = catchAsync(async (req: Request, res: Response) => {
   const course = await CourseServices.getCourseById(req.params.courseId);
   sendResponse(res, {
@@ -70,4 +83,5 @@ export const CourseController = {
   createCourse,
   updateCourse,
   deleteCourse,
+  getModuleAndLecturesByCourseId
 };

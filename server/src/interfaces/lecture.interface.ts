@@ -6,6 +6,6 @@ export interface ILecture {
     title: string;
     videoUrl: string;
     pdfNotes: string[];
-    isComplete: boolean;
+    completed?: boolean;
   }
   

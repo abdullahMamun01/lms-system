@@ -7,10 +7,19 @@ import {
   lectureSchema,
   updateLectureSchema,
 } from "../validations/lecture.validation";
+import { WatchLectureController } from "../controllers/watch.controller";
+import { watchLectureSchema } from "../validations/watch.validation";
 
 const router = express.Router();
 
 router.get("/", LectureController.getAllLectures);
+
+router.post(
+  "/completed",
+  authoRization("USER"),
+  validateRequest(watchLectureSchema),
+  WatchLectureController.markLectureAsCompleted
+);
 
 router.patch(
   "/:lectureId",
