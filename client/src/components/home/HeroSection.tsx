@@ -64,8 +64,8 @@ export default function HeroSection() {
               <Image
                 src={HeroImage}
                 alt="Student learning"
-                width={1500}
-                height={1500}
+                width={0}
+                height={0}
                 className="object-cover w-full h-full "
                 priority
               />

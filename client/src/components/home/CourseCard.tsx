@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import CourseImage from "../../../public/assets/React.jpg";
-import StarRating from "./StarRating";
 
 interface ICourse {
   title: string;
@@ -38,13 +37,13 @@ export default function CourseCard({ course }: { course: ICourse }) {
             <Heart className="h-5 w-5" />
           </button>
         </div>
-        <h3 className="mt-6 text-lg font-semibold text-secondary ">{course.title}</h3>
+        <h3 className="mt-6 text-lg font-semibold text-secondary line-clamp-1">{course.title}</h3>
         <p className="text-sm text-secondary/80 line-clamp-1">{course.description}</p>
       </CardHeader>
       <CardContent>
-        <StarRating rating={course.rating} />
+        {/* <StarRating rating={course.rating} /> */}
         <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-secondary">
             <Clock className="h-4 w-4"/>
             {course.duration}
           </div>
