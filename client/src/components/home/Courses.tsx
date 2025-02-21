@@ -51,7 +51,7 @@ const courses = [
 export default function Courses() {
   return (
     <section className="py-16   bg-gray-50">
-      <div className="container mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center">
           <h2 className="mb-4 text-4xl font-bold text-secondary">Our Courses</h2>
           <p className="mb-8 text-secondary/80">

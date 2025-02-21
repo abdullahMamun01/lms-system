@@ -9,7 +9,7 @@ export default function CourseDetails() {
   return (
     <div className=" bg-gray-50 pb-16">
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Course Info */}
           <div className="lg:col-span-2">

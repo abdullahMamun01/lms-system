@@ -59,7 +59,7 @@ const instructors: Instructor[] = [
 export default function InstructorSection() {
   return (
     <section className="py-16">
-      <div className="container mx-auto">
+      <div className="max-w-7xl mx-auto">
         <h2 className="mb-12 text-center text-3xl font-bold text-secondary uppercase">
           Instructors
         </h2>
