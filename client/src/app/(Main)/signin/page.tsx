@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 
-import LoginImage from "../../../public/assets/signin-auth.png";
+import LoginImage from "../../../../public/assets/signin-auth.png";
 
 import LoginForm from "@/components/auth/LoginForm";
 export default function SigninPage() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2 ">
       {/* Left side with illustration */}
-      <div className=" lg:flex flex-col w-full h-full  p-8 bg-primary/5 ">
+      <div className=" lg:flex flex-col w-full h-full max-sm:hidden  p-8 bg-primary/5 ">
         <Image
           src={LoginImage}
           alt="Decorative bird illustration"

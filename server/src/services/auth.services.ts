@@ -9,8 +9,8 @@ import UserModel from "../models/user.model";
 import config from "../config";
 
 const loginUser = async (payload: ILogin) => {
+  console.log(payload);
   const user = await UserModel.findOne({ email: payload.email }).lean();
-
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }

@@ -1,7 +1,6 @@
 import React from "react";
-import { Button } from "../ui/button";
-import { Key, User } from "lucide-react";
 import Link from "next/link";
+import AuthMenu from "../auth/AuthMenu";
 
 export default function Navbar() {
   return (
@@ -31,19 +30,7 @@ export default function Navbar() {
             Community
           </a>
         </div>
-        <div className="flex items-center gap-4">
-          <Button
-            size="sm"
-            className="bg-[#D7F4E6] text-secondary hover:text-gray-50 hover:bg:[#D7F4E6]"
-          >
-            Sign in
-            <Key className="h-4 w-4 mr-1" />
-          </Button>
-          <Button size="sm" className="flex items-center gap-2">
-            <User className="h-4 w-4" />
-            Signup Free
-          </Button>
-        </div>
+        <AuthMenu />
       </nav>
     </header>
   );

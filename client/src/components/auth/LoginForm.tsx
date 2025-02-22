@@ -1,18 +1,57 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import Link from "next/link";
-import React from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "@/zod/auth.schema";
+import ControlledInput from "../forms/ControlledInput";
+import { ILogin } from "@/interfaces/auth.interface";
+import toast from "react-hot-toast";
+import useAuth from "@/store/auth.store";
+import { login } from "@/services/authService";
+import { useRouter } from "next/navigation";
+import SubmitBtn from "./SubmitBtn";
 
 export default function LoginForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const { setAuth } = useAuth();
+  const form = useForm<ILogin>({
+    resolver: zodResolver(loginSchema),
+  });
+  const { handleSubmit, setError } = form;
+  const onSubmit = async (formData: ILogin) => {
+    setIsLoading(true);
+    try {
+      const { data } = await login(formData);
+      setIsLoading(false);
+      toast.success("Login successfully");
+      setAuth({
+        user: data.user,
+        token: data.accessToken,
+      });
+      router.push("/");
+    } catch (err: unknown) {
+      setError("password", { message: "invalid email or password" });
+      setIsLoading(false );
+    }
+  };
+
   return (
-    <form className="space-y-6">
+    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-2">
         <label className="text-sm text-secondary" htmlFor="email">
           Users name or Email
         </label>
-        <Input
-          id="email"
-          defaultValue="David Brooks"
+        <ControlledInput
+          control={form.control}
+          name="email"
+          placeholder="Enter your email"
+          type="email"
+          required
           className="w-full p-2 border rounded"
         />
       </div>
@@ -21,9 +60,13 @@ export default function LoginForm() {
         <label className="text-sm text-gray-500" htmlFor="password">
           Password
         </label>
-        <Input
-          id="password"
+
+        <ControlledInput
+          control={form.control}
+          name="password"
+          placeholder="Enter your password"
           type="password"
+          required
           defaultValue="password"
           className="w-full p-2 border rounded"
         />
@@ -34,9 +77,13 @@ export default function LoginForm() {
         </div>
       </div>
 
-      <Button className="w-full bg-primary hover:bg-primary/90 text-white">
+      <SubmitBtn
+        isLoading={isLoading}
+        loadingText="Signing in..."
+        className="w-full bg-primary hover:bg-primary/90 text-white"
+      >
         Sign in
-      </Button>
+      </SubmitBtn>
 
       <div className="relative">
         <div className="absolute inset-0 flex items-center">

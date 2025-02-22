@@ -5,7 +5,7 @@ import authRoutes from "./routes/auth.routes";
 import courseRoutes from "./routes/course.routes";
 import moduleRoutes from "./routes/module.routes";
 import lectureRoutes from "./routes/lecture.routes";
-
+import cors from "cors";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import notFound from "./middlewares/notFound";
 
@@ -16,7 +16,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors())
 // Routes
 app.get("/", (req, res) => {
   res.send("Home Page ");

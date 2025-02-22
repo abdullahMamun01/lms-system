@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import LoginImage from "../../../public/assets/signup-auth.jpg";
+import LoginImage from "../../../../public/assets/signup-auth.jpg";
 
 import RegistrationForm from "@/components/auth/RegistrationForm";
 export default function SignupPage() {
