@@ -55,6 +55,12 @@ const createCourse = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateCourse = catchAsync(async (req: Request, res: Response) => {
+  if (req.file) {
+    const thumbnail = (await uploadSingleFile(req.file as Express.Multer.File))
+      .secure_url;
+    req.body.thumbnail = thumbnail;
+  }
+
   const course = await CourseServices.updateCourse(
     req.params.courseId,
     req.body

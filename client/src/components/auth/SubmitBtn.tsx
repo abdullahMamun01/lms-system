@@ -8,14 +8,26 @@ interface Props {
   children: React.ReactNode;
   className?: string;
   loadingText?: string;
+  handleClick?: () => void;
 }
 
-export default function SubmitBtn({ isLoading, children, className,loadingText }: Props) {
+export default function SubmitBtn({
+  isLoading,
+  children,
+  className,
+  loadingText,
+  handleClick,
+}: Props) {
   return (
-    <Button type="submit" className={cn("w-full flex gap-2", className)}>
+    <Button
+      onClick={handleClick}
+      type="submit"
+      className={cn("w-full flex gap-2", className)}
+    >
       {isLoading ? (
         <span className="flex gap-2">
-          <Spinner className="text-secondary w-4 h-4" size="small" /> {loadingText}
+          <Spinner className="text-secondary w-4 h-4" size="small" />{" "}
+          {loadingText}
         </span>
       ) : (
         <span>{children}</span>

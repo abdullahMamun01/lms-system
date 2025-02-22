@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IResponse } from "@/interfaces/response.interface";
 import axiosInstance from "./axiosService";
 import { ICourse } from "@/interfaces/course.interface";
@@ -27,8 +28,12 @@ const getCourseById = async (courseId: string): Promise<IResponse<ICourse>> => {
   return data;
 };
 
-const updateCourse = async (data: FormData, token: string) => {
-  const response = await axiosInstance.patch("/courses", data, {
+const updateCourse = async (
+  courseid: string,
+  data: Partial<ICourse> | FormData,
+  token: string
+) => {
+  const response = await axiosInstance.patch(`/courses/${courseid}`, data, {
     headers: {
       "Content-Type": "multipart/form-data", //
       Authorization: `Bearer ${token}`,

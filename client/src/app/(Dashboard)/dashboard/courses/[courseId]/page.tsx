@@ -12,6 +12,7 @@ import {
   import { Input } from "@/components/ui/input";
   import DashboardCourseCard from "@/components/dashboard/DashboardCourseCard";
 import { getCourseById } from "@/services/course.service";
+
   interface Props {
     params: Promise<{ courseId: string }>;
 }
@@ -20,7 +21,7 @@ import { getCourseById } from "@/services/course.service";
     const {courseId} = await params
     const response = await getCourseById(courseId)
     const course = response.data
-    console.log(course)
+   
     return (
   
         <div className="flex-1 p-8">

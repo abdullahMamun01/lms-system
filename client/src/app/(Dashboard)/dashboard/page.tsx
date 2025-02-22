@@ -10,10 +10,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import DashboardCourseCard from "@/components/dashboard/DashboardCourseCard";
+// import DashboardCourseCard from "@/components/dashboard/DashboardCourseCard";
+import { notFound } from "next/navigation";
 
 
 export default function AdminDashboard() {
+  notFound()
+
   return (
 
       <div className="flex-1 p-8">
@@ -37,7 +40,7 @@ export default function AdminDashboard() {
 
         <div className="grid grid-cols-2 gap-8">
           {/* Left Column */}
-         <DashboardCourseCard/>
+         {/* <DashboardCourseCard/> */}
 
           {/* Right Column */}
           <div className="space-y-8">

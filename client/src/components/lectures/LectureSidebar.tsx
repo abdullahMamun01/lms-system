@@ -12,7 +12,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { modules } from "@/app/courses/[id]/lectures/data";
+import { modules } from "@/app/(Main)/courses/[id]/lectures/data";
 
 export default function LectureSidebar() {
     const modulesData = modules;

@@ -1,3 +1,4 @@
+
 import axios, { AxiosError } from 'axios';
 
 const axiosInstance = axios.create({
@@ -21,8 +22,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     console.log(error.response.data)
     if (error instanceof AxiosError) {
-      const errorMessage = error.response?.data?.message;
-      console.log(errorMessage)
+      const errorMessage = error.response?.data?.message
       throw new Error(errorMessage);
     }else {
       const errorMessage  = error.response.data
