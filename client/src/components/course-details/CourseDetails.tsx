@@ -4,24 +4,30 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import CourseFeatures from "./CourseFeatures";
-import ReactCourse from "../../../public/assets/React.jpg";
-export default function CourseDetails() {
+
+import { getCourseById } from "@/services/course.service";
+export default async function CourseDetails({
+  courseId,
+}: {
+  courseId: string;
+}) {
+  const response = await getCourseById(courseId);
+  const course = response.data;
+
   return (
     <div className=" bg-gray-50 pb-16">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-10 lg:grid-cols-12">
           {/* Course Info */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-7">
             <Badge
               variant="secondary"
               className="mb-4 bg-primary/20 text-primary/90 px-3 py-1"
             >
               Live Class
             </Badge>
-            <h1 className="mb-4 text-3xl font-bold">
-              App Development with Flutter
-            </h1>
+            <h1 className="mb-4 text-3xl font-bold">{course.title}</h1>
 
             <div className="mb-6 flex items-center gap-2">
               <div className="flex items-center">
@@ -31,13 +37,7 @@ export default function CourseDetails() {
               <span className="text-secondary">(293 Ratings)</span>
             </div>
 
-            <p className="mb-6 text-secondary/80">
-              In one course, you will learn everything about development. You
-              will learn everything from basic to advanced level through 72 live
-              classes and 140 pre-recorded videos. Along with that, you will get
-              technical support, regular support, job placement support, and
-              lifetime access to all resources!
-            </p>
+            <p className="mb-6 text-secondary/80 w-4/5">{course.description}</p>
 
             <div className="mb-8">
               <Button
@@ -45,7 +45,7 @@ export default function CourseDetails() {
                 className="bg-primary/90 text-gray-50 hover:bg-primary"
               >
                 Admit to this course
-                <span className="ml-2 text-lg font-bold">$99</span>
+                <span className="ml-2 text-lg font-bold">${course.price}</span>
               </Button>
             </div>
 
@@ -65,12 +65,12 @@ export default function CourseDetails() {
           </div>
 
           {/* Video Preview */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-5">
             <Card className="overflow-hidden">
               <CardContent className="p-0">
                 <Image
-                  src={ReactCourse}
-                  alt="DART MasterClass Preview"
+                  src={course.thumbnail}
+                  alt={course.title}
                   width={500}
                   height={500}
                   className="w-full h-full object-cover object-center"

@@ -4,7 +4,7 @@ import AuthMenu from "../auth/AuthMenu";
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 w-full border-b bg-background/95 z- backdrop-blur supports-[backdrop-filter]:bg-background/60 ">
+    <header className="sticky top-0 w-full border-b bg-background/95 z- backdrop-blur supports-[backdrop-filter]:bg-background/60 z-[999] ">
       <nav className="container flex h-16 items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-[">

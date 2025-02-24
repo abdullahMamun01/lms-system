@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -10,9 +9,9 @@ import ControlledInput from "../forms/ControlledInput";
 import { ILogin } from "@/interfaces/auth.interface";
 import toast from "react-hot-toast";
 import useAuth from "@/store/auth.store";
-import { login } from "@/services/authService";
 import { useRouter } from "next/navigation";
 import SubmitBtn from "./SubmitBtn";
+import { loginAction } from "@/actions/auth.action";
 
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +25,8 @@ export default function LoginForm() {
   const onSubmit = async (formData: ILogin) => {
     setIsLoading(true);
     try {
-      const { data } = await login(formData);
+      const { data } = await loginAction(formData);
+      console.log(data)
       setIsLoading(false);
       toast.success("Login successfully");
       setAuth({
@@ -37,6 +37,7 @@ export default function LoginForm() {
     } catch (err: unknown) {
       setError("password", { message: "invalid email or password" });
       setIsLoading(false );
+      console.log(err)
     }
   };
 

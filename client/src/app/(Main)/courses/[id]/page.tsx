@@ -1,12 +1,18 @@
-import CourseDetails from '@/components/course-details/CourseDetails'
-import InstructorSection from '@/components/course-details/InstructorSection'
-import React from 'react'
+import CourseDetails from "@/components/course-details/CourseDetails";
+import InstructorSection from "@/components/course-details/InstructorSection";
+import React from "react";
+type TParams = Promise<{ id: string }>;
 
-export default function page() {
+export default async function CourseDetailsPage({
+  params,
+}: {
+  params: TParams;
+}) {
+  const { id } = await params;
   return (
     <div>
-        <CourseDetails/>
-        <InstructorSection/>
+      <CourseDetails courseId={id} />
+      <InstructorSection />
     </div>
-  )
+  );
 }

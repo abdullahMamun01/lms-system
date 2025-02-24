@@ -3,8 +3,9 @@
 import type React from "react";
 
 
-import CourseForm from "@/components/forms/CourseForm";
-
+// import CourseForm from "@/components/forms/CourseForm";
+import dynamic from "next/dynamic";
+const CourseForm  = dynamic(() => import("@/components/forms/CourseForm"), { ssr: false });
 
 
 export default function AddCoursePage() {

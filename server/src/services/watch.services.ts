@@ -1,5 +1,6 @@
 import AppError from "../errors/AppError";
 import { IWatchLecture } from "../interfaces/watch.interface";
+import lectureModel from "../models/lecture.model";
 import UserModel from "../models/user.model";
 import watchModule from "../models/watch.module";
 import { convertObjectIdToId } from "../utils/convertObjectId";
@@ -34,9 +35,12 @@ const markedAsLectureCompleted = async (payload: IWatchLecture) => {
   if (alreadyCreated) {
     throw new AppError(httpStatus.CONFLICT ,"You have already watched this lecture");
   }
+  const lecture = await lectureModel.findById(payload.lecture).lean();
 
-
-  const watchLecture = await watchModule.create(payload);
+  if (!lecture) {
+    throw new AppError(httpStatus.NOT_FOUND, "Lecture not found");
+  }
+  const watchLecture = await watchModule.create({...payload , module: lecture.module});
   return convertObjectIdToId(watchLecture.toObject());
 };
 

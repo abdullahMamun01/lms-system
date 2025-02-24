@@ -1,19 +1,48 @@
-import AppError from "../errors/AppError";
-import { ILecture } from "../interfaces/lecture.interface";
-import ModuleModel from "../models/module.model";
-import LectureModel from "../models/lecture.model";
-import { convertObjectIdToId } from "../utils/convertObjectId";
-import httpStatus from "http-status";
-import { uploadMultipleFiles } from "../utils/uploadFile";
-import mongoose from "mongoose";
+import AppError from '../errors/AppError';
+import { ILecture } from '../interfaces/lecture.interface';
+import ModuleModel from '../models/module.model';
+import LectureModel from '../models/lecture.model';
+import { convertObjectIdToId } from '../utils/convertObjectId';
+import httpStatus from 'http-status';
+import { uploadMultipleFiles } from '../utils/uploadFile';
+import mongoose from 'mongoose';
+import courseModel from '../models/course.model';
 
 const getLecturesByModuleId = async (moduleId: string) => {
   const module = await ModuleModel.findById(moduleId).lean();
   if (!module) {
-    throw new AppError(httpStatus.NOT_FOUND, "Module not found");
+    throw new AppError(httpStatus.NOT_FOUND, 'Module not found');
   }
   const lectures = await LectureModel.find({ module: moduleId }).lean();
   return convertObjectIdToId(lectures);
+};
+
+// const getNextLession = (lectureId:string , moduleId:string) => {
+//   const
+// };
+
+const getLectureById = async (lectureId: string) => {
+  const lecture = await LectureModel.findById(lectureId).lean();
+  if (!lecture) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Lecture not found');
+  }
+  const lession = convertObjectIdToId(lecture);
+  const findLectures = await LectureModel.find({ module: lession.module })
+    .sort({ createdAt: 1 })
+    .lean();
+  const index = findLectures.findIndex(
+    (item) => item._id.toString() === lectureId
+  );
+  const nextLession =
+    index === findLectures.length - 1 ? null : findLectures[index + 1];
+  const previousLession = index === 0 ? null : findLectures[index - 1];
+  return {
+    ...lession,
+    nextLession: nextLession ? nextLession._id : null,
+    previousLession: previousLession
+      ? previousLession._id
+      : null,
+  }
 };
 
 const getAllLectures = async (query: Record<string, unknown>) => {
@@ -21,60 +50,44 @@ const getAllLectures = async (query: Record<string, unknown>) => {
     limit = 10,
     page = 1,
     module: moduleName,
-    course: courseName = "",
+    course: courseName = '',
   } = query;
   const skip = (Number(page) - 1) * Number(limit);
   const filters: Record<string, unknown> = {};
-  if (moduleName) {
-    filters["module"] = moduleName;
-  }
-  if (courseName) {
-    filters["course"] = courseName;
-  }
 
-  const course = await ModuleModel.findOne({
+  const course = await courseModel.findOne({
     title: {
-      RegExp: new RegExp(courseName as string, "i"),
+      RegExp: new RegExp(courseName as string, 'i'),
     },
   });
 
-  const lectures = await ModuleModel.findOne({
+  const module = await ModuleModel.findOne({
     course: course?._id,
     title: {
-      RegExp: new RegExp(moduleName as string, "i"),
+      RegExp: new RegExp(moduleName as string, 'i'),
     },
-  })
-    .skip(skip)
+  });
+  const lectures = await LectureModel.find({ module: module?._id })
     .limit(Number(limit))
-    .populate("lectures")
+    .skip(skip)
     .lean();
 
   return lectures;
 };
 
-const createLecture = async (
-  payload: ILecture,
-  files: Express.Multer.File[]
-) => {
+const createLecture = async (payload: ILecture) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const module = await ModuleModel.findById(payload.module).session(
-      session
-    );
+    const module = await ModuleModel.findById(payload.module).session(session);
     if (!module) {
-      throw new AppError(httpStatus.NOT_FOUND, "Module not found");
+      throw new AppError(httpStatus.NOT_FOUND, 'Module not found');
     }
-
-    const pdfNotes = (
-      await uploadMultipleFiles(files as Express.Multer.File[], "lecture-notes")
-    ).map((file) => file.secure_url);
 
     const lecture = await LectureModel.create(
       [
         {
           ...payload,
-          pdfNotes,
         },
       ],
       { session }
@@ -100,13 +113,13 @@ const updateLecture = async (
 ) => {
   const lecture = await LectureModel.findById(lectureId).lean();
   if (!lecture) {
-    throw new Error("Lecture not found");
+    throw new Error('Lecture not found');
   }
 
   let pdfNotes = lecture.pdfNotes;
   if (files.length > 0) {
     pdfNotes = (
-      await uploadMultipleFiles(files as Express.Multer.File[], "lecture-notes")
+      await uploadMultipleFiles(files as Express.Multer.File[], 'lecture-notes')
     ).map((file) => file.secure_url);
   }
 
@@ -124,7 +137,7 @@ const updateLecture = async (
 const deleteLecture = async (lectureId: string) => {
   const lecture = await LectureModel.findById(lectureId).lean();
   if (!lecture) {
-    throw new Error("Lecture not found");
+    throw new Error('Lecture not found');
   }
   const deletedLecture = await LectureModel.deleteOne({
     _id: lectureId,
@@ -149,4 +162,5 @@ export const LectureServices = {
   getLecturesByModuleId,
   updateLecture,
   deleteLecture,
+  getLectureById,
 };

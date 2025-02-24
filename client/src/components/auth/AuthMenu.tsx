@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { Key, User } from "lucide-react";
 import useAuth from "@/store/auth.store";
 import { UserMenu } from "../user/UserMenu";
+import Link from "next/link";
 
 export default function AuthMenu() {
   const { token } = useAuth();
@@ -15,17 +16,21 @@ export default function AuthMenu() {
         </div>
       ) : (
         <>
-          <Button
-            size="sm"
-            className="bg-[#D7F4E6] text-secondary hover:text-gray-50 hover:bg:[#D7F4E6]"
-          >
-            Sign in
-            <Key className="h-4 w-4 mr-1" />
-          </Button>
-          <Button size="sm" className="flex items-center gap-2">
-            <User className="h-4 w-4" />
-            Signup Free
-          </Button>
+          <Link href="/signin">
+            <Button
+              size="sm"
+              className="bg-[#D7F4E6] text-secondary hover:text-gray-50 hover:bg:[#D7F4E6]"
+            >
+              Sign in
+              <Key className="h-4 w-4 mr-1" />
+            </Button>
+          </Link>
+          <Link href='/signup'>
+            <Button size="sm" className="flex items-center gap-2">
+              <User className="h-4 w-4" />
+              Signup Free
+            </Button>
+          </Link>
         </>
       )}
     </div>

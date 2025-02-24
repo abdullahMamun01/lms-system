@@ -6,7 +6,7 @@ import HeroImage from "../../../public/assets/hero2.png";
 export default function HeroSection() {
   return (
     <div className="min-h-screen  max-w-7xl mx-auto px-4 sm:px-1 lg:px-0 md:px-2 z-[-10]">
-      <main className="container pt-24 lg:pt-32 pb-2 sm:pb-4 md:pb-6 lg:pb-16 z-[-10]">
+      <main className="max-w-7xl pt-24 lg:pt-32 pb-2 sm:pb-4 md:pb-6 lg:pb-16 z-[-10]">
         <div className="relative z-[-10]">
           <div className="absolute inset-0 -z-10">
             <div className="absolute right-1/2 top-0 h-[300px] w-[300px] -translate-y-1/2 rounded-full bg-primary/10 blur-3xl" />

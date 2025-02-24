@@ -1,26 +1,22 @@
 "use client";
+import { ILecture } from "@/interfaces/lecture.inteface";
 import navigateToLession from "@/utils/navigateToLession";
 import { CheckCircle2, Lock } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
-interface Lecture {
-  id: string;
-  title: string;
-  duration: string;
-  completed: boolean;
-}
-
-export default function LectureList({ lectures }: { lectures: Lecture[] }) {
+export default function LectureList({ lectures }: { lectures: ILecture[] }) {
   const router = useRouter();
   const pathname = usePathname();
-
+console.log({lectures})
   return (
     <div>
       {lectures.map((lecture, i) => (
         <button
           key={lecture.id}
-          disabled={i > 2 && !lecture.completed}
-          onClick={() => navigateToLession(lecture.id, pathname, router)}
+          disabled={i > 0 && !lecture.completed}
+          onClick={() =>
+            navigateToLession(lecture._id as string, pathname, router)
+          }
           className={`flex items-center gap-3 w-full text-left p-2 rounded hover:bg-gray-700/30 transition-colors
            `}
         >

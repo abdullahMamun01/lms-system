@@ -9,6 +9,7 @@ interface Props {
   className?: string;
   loadingText?: string;
   handleClick?: () => void;
+  size?: "default" | "sm" | "lg" | "icon" 
 }
 
 export default function SubmitBtn({
@@ -17,9 +18,11 @@ export default function SubmitBtn({
   className,
   loadingText,
   handleClick,
+  size
 }: Props) {
   return (
     <Button
+    size={size}
       onClick={handleClick}
       type="submit"
       className={cn("w-full flex gap-2", className)}

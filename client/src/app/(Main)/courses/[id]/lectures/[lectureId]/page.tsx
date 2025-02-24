@@ -3,44 +3,70 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 
 import VideoPlay from "@/components/lectures/VideoPlay";
-import { modules } from "../data";
 import { use } from "react";
 import navigateToLession from "@/utils/navigateToLession";
 import { usePathname, useRouter } from "next/navigation";
+import { useFetch } from "@/hooks/useFetch";
+import useAuth from "@/store/auth.store";
+import {
+  getLectureById,
+  lectureMarkedAsComplete,
+} from "@/services/lectureService";
+import { ILectureWithProgress } from "@/interfaces/lecture.inteface";
+import VideoSkelaton from "@/components/skeleton/VideoSkelaton";
+import { useModuleLectureStore } from "@/store/moduleLecture.store";
 
 export default function LectureVideoPage({
   params,
 }: {
   params: Promise<{ lectureId: string }>;
 }) {
-  const { lectureId } = use(params);
-  const allModules = modules;
-  const lessions = allModules.flatMap((module) => module.lessons);
-  const playableLesson = lessions.find((lesson) => lesson.id === lectureId);
-  const startToNextLession = lessions.findIndex(
-    (lesson) => lesson.id === lectureId
-  );
-  const nextLession = lessions.slice(
-    startToNextLession + 1,
-    startToNextLession + 2
-  );
-  const prevLession = lessions.slice(
-    startToNextLession - 1,
-    startToNextLession
-  )
-
+  const { modules, setModules } = useModuleLectureStore();
   const pathName = usePathname();
   const router = useRouter();
-  const nextLessionNavigate = () => {
-    navigateToLession(nextLession[0].id, pathName, router);
+  const { lectureId } = use(params);
+  const { token } = useAuth();
+  const { data, isLoading } = useFetch<ILectureWithProgress>(
+    () => getLectureById(lectureId, token as string),
+    [token, router, pathName, lectureId]
+  );
+  if (isLoading) {
+    return <VideoSkelaton />;
+  }
+  const nextLessionNavigate = async () => {
+    navigateToLession(data?.nextLession as string, pathName, router);
+    const updateModules = modules.map((module) => {
+      if (module.lectures) {
+        return {
+          ...module,
+          lectures: module.lectures.map((lecture) => {
+            if (lecture._id === lectureId) {
+              return {
+                ...lecture,
+                completed: true,
+              };
+            }
+            return lecture;
+          }),
+        };
+      }
+      return module;
+    });
+    setModules(updateModules);
+
+    lectureMarkedAsComplete(lectureId, token as string)
+      .then(() => {
+        console.log("Lecture marked as complete");
+      })
+      .catch((error) => {
+        console.error("Failed to mark lecture as complete:", error);
+      });
   };
 
-
-
   const prevLessionNavigate = () => {
-
-      navigateToLession(prevLession[0].id, pathName, router);
-    
+    if (data?.previousLession) {
+      navigateToLession(data?.previousLession, pathName, router);
+    }
   };
 
   return (
@@ -48,13 +74,27 @@ export default function LectureVideoPage({
       <div className="flex items-center gap-2">
         <Button variant="ghost" className="text-primary/70">
           <ChevronDown className="h-4 w-4 mr-2" />
-          1-1 How The Web Works
+          {data?.title}
         </Button>
       </div>
-      {playableLesson && <VideoPlay videoUrl={playableLesson.videoUrl} />}
+      {data && (
+        <VideoPlay lectureId={lectureId as string} videoUrl={data.videoUrl} />
+      )}
+
       <div className="flex justify-end gap-5">
-        <Button onClick={prevLessionNavigate} className="bg-secondary text-gray-100">Previous</Button>
-        <Button onClick={nextLessionNavigate} className="px-8">Next</Button>
+        <Button
+          disabled={!data?.previousLession}
+          onClick={prevLessionNavigate}
+          className="bg-white text-gray-100"
+        >
+          Previous
+        </Button>
+        <Button
+          onClick={nextLessionNavigate}
+          className="px-8"
+        >
+          Next
+        </Button>
       </div>
     </div>
   );

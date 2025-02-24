@@ -68,7 +68,9 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    
   }
+  
 }
 
 
@@ -79,5 +81,10 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+@layer base {
+  .container {
+    @apply px-4 md:px-6 lg:px-8;
   }
 }

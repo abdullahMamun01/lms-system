@@ -20,6 +20,7 @@ const getAllCourse = catchAsync(async (req: Request, res: Response) => {
 const getModuleAndLecturesByCourseId = catchAsync(
   async (req: Request, res: Response) => {
     const courseId = req.params.courseId;
+    console.log(courseId);
     const courses = await CourseServices.getModuleAndLecturesByCourseId(courseId , req.user.userId);
     sendResponse(res, {
       statusCode: 200,

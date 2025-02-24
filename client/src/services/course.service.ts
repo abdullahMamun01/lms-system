@@ -2,6 +2,22 @@
 import { IResponse } from "@/interfaces/response.interface";
 import axiosInstance from "./axiosService";
 import { ICourse } from "@/interfaces/course.interface";
+import { ICourseModule, IModule } from "@/interfaces/module.interface";
+
+
+
+const getModuleAndLessionsByCourseId = async (
+  courseId: string,
+  token: string
+): Promise<IResponse<ICourseModule>> => {
+  const response = await axiosInstance.get(`/courses/${courseId}/modules`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
 
 const addCourse = async (data: FormData, token: string) => {
   const response = await axiosInstance.post("/courses", data, {
@@ -14,10 +30,8 @@ const addCourse = async (data: FormData, token: string) => {
   return response;
 };
 
-const getCourseList = async (
-  query?: Record<string, unknown>
-): Promise<IResponse<ICourse[]>> => {
-  const response = await axiosInstance.get("/courses");
+const getCourseList = async (query?: string): Promise<IResponse<ICourse[]>> => {
+  const response = await axiosInstance.get(`/courses?${query}`);
   const data = response.data;
   return data;
 };
@@ -52,4 +66,11 @@ const deleteCourse = async (courseId: string, token: string) => {
   return response;
 };
 
-export { addCourse, updateCourse, deleteCourse, getCourseList, getCourseById };
+export {
+  addCourse,
+  updateCourse,
+  deleteCourse,
+  getCourseList,
+  getCourseById,
+  getModuleAndLessionsByCourseId,
+};

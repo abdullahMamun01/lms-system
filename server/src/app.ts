@@ -1,6 +1,5 @@
 import express from "express";
 import connectDB from "./config/db";
-import userRoutes from "./routes/user.routes";
 import authRoutes from "./routes/auth.routes";
 import courseRoutes from "./routes/course.routes";
 import moduleRoutes from "./routes/module.routes";
@@ -8,7 +7,7 @@ import lectureRoutes from "./routes/lecture.routes";
 import cors from "cors";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import notFound from "./middlewares/notFound";
-
+import userRoutes from "./routes/user.routes";
 
 
 const app = express();
@@ -25,8 +24,8 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/courses", courseRoutes);
 app.use("/api/v1/modules", moduleRoutes);
 app.use("/api/v1/lectures", lectureRoutes);
+app.use("/api/v1/users", userRoutes);
 
-// app.use("/api/v1/users", userRoutes);
 
 // Error Handler
 app.use(globalErrorHandler);

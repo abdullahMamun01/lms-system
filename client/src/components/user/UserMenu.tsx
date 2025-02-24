@@ -9,9 +9,12 @@ import useAuth from "@/store/auth.store";
 import { BookOpen, LogOut, User } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
+
 
 export function UserMenu() {
   const { user, logout } = useAuth();
+  const router = useRouter()
   const avatarImage = `https://ui-avatars.com/api/?${user?.firstName.slice(0, 1)}${user?.lastName.slice(0, 1)}`;
   return (
     <Popover>
@@ -37,18 +40,32 @@ export function UserMenu() {
           Your Profile
         </Link>
 
+        {
+          user?.role === 'ADMIN' ?
+          <Link
+          href="/dashboard/courses"
+          className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+        >
+          <BookOpen className="mr-3 h-4 w-4" />
+          Go To Dashboard
+        </Link>
+        :
         <Link
           href="/my-courses"
           className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
         >
           <BookOpen className="mr-3 h-4 w-4" />
-          Your Courses
+          Go To Courses
         </Link>
+        }
+        
 
         <button
           onClick={() => {
             // Handle logout
             logout();
+            router.push('/signin')
+
           }}
           className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
         >

@@ -20,8 +20,10 @@ const getCompletedLectureIds = catchAsync(
 
 const markLectureAsCompleted = catchAsync(
   async (req: Request, res: Response) => {
+    const lectureId = req.params.lectureId;
     const completedLecture = await WatchServices.markedAsLectureCompleted({
       ...req.body,
+      lecture: lectureId,
       user: req.user.userId,
     });
     sendResponse(res, {
