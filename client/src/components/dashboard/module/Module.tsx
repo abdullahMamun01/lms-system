@@ -31,7 +31,7 @@ export default function Module({ moduleId }: { moduleId: string }) {
     if (token && moduleId) getModule();
   }, [token, moduleId]);
   return (
-    <div className="ml-4 mb-2">
+    <div className="ml-4 mb-2 lg:p-0 px-4">
       {isLoading ? <LoadingSpinner /> : <ModuleTitle title={moduleTitle} />}
     </div>
   );

@@ -12,7 +12,9 @@ export default async function ModuleManagePage({ params }: Props) {
   return (
     <div>
       <Module moduleId={moduleId} />
-      <ModuleLectureList />
+      <div className="lg:p-0 px-6">
+        <ModuleLectureList />
+      </div>
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function ModuleLectureList() {
   }, []);
 
   return (
-    <div className="w-2/4 ml-4">
+    <div className="lg:w-2/4 ml-4">
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">

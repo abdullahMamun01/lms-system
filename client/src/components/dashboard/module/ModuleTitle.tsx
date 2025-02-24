@@ -15,7 +15,7 @@ export default function ModuleTitle({ title }: { title: string }) {
     setEditTitel(false);
   };
   return (
-    <Card className="mt-8 w-2/4">
+    <Card className="mt-8 lg:p-0 lg:w-2/4">
       <CardHeader>
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-md bg-emerald-50">

@@ -43,7 +43,7 @@ export function UserMenu() {
         {
           user?.role === 'ADMIN' ?
           <Link
-          href="/dashboard/courses"
+          href="/dashboard"
           className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
         >
           <BookOpen className="mr-3 h-4 w-4" />

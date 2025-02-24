@@ -6,30 +6,15 @@ import LoadingSpinner from "../LoadingSpinner";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useFetch } from "@/hooks/useFetch";
 
 export default function MyCourses() {
   const { token } = useAuth();
-  const [courses, setCourses] = useState<IUserCourse[] | []>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    async function fetchCourse() {
-      setIsLoading(true);
-      try {
-        const response = await getMyCourses(token as string);
-        const data = response.data;
-        setCourses(data);
-        setIsLoading(false);
-      } catch (error) {
-        const err = error as Error;
-        setIsLoading(false);
-        console.log(err);
-      }
-    }
-    if (token) {
-      fetchCourse();
-    }
-  }, [token]);
+  const { data, isLoading } = useFetch<IUserCourse[]>(
+    () => getMyCourses(token as string),
+    [token]
+  );
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -37,7 +22,7 @@ export default function MyCourses() {
   return (
     <div>
       <div className="grid gap-6 md:grid-cols-2">
-        {courses.map((course) => (
+        {data?.map((course) => (
           <div
             key={course.id}
             className="rounded-lg bg-secondary p-4 backdrop-blur-sm"
@@ -53,12 +38,8 @@ export default function MyCourses() {
             <h2 className="mb-2 text-xl font-semibold text-white">
               {course.title}
             </h2>
-            {/* <p className="mb-4 text-sm text-gray-400">{course.author}</p> */}
+
             <div className="mb-4">
-              {/* <Progress value={course.progress} className="h-2 bg-gray-700" />
-              <span className="mt-1 text-xs text-gray-400">
-                {course.progress}%
-              </span> */}
             </div>
             <div className="flex gap-4">
               <Link

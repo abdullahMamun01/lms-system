@@ -5,7 +5,7 @@ import { MobileNav } from "./MobileNav";
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 w-full border-b bg-background/95 z-[99] backdrop-blur supports-[backdrop-filter]:bg-background/60 isolation-isolate">
+    <header className="sticky z-[20] top-0 w-full border-b bg-background/95  backdrop-blur supports-[backdrop-filter]:bg-background/60 ">
 
       <nav className="container flex h-16 items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
@@ -19,7 +19,7 @@ export default function Navbar() {
           </Link>
         </div>
         <div className="hidden md:flex items-center gap-6">
-          <a href="#" className="text-sm font-medium hover:text-primary">
+          <a href="/courses" className="text-sm font-medium hover:text-primary">
             Courses
           </a>
           <a href="#" className="text-sm font-medium hover:text-primary">

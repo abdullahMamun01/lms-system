@@ -1,6 +1,6 @@
 import { IResponse } from "@/interfaces/response.interface";
 import axiosInstance from "./axiosService";
-import { IModule } from "@/interfaces/module.interface";
+import { ICourseModule, IModule } from "@/interfaces/module.interface";
 
 const getModuleById = async (
   moduleId: string,
@@ -17,7 +17,7 @@ const getModuleById = async (
 const getModulesByCourse = async (
   courseId: string,
   token: string
-): Promise<IResponse<IModule[]>> => {
+): Promise<IResponse<ICourseModule>> => {
   
   const response = await axiosInstance.get(`/courses/${courseId}/modules`, {
     headers: {

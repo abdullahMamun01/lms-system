@@ -37,7 +37,7 @@ export default async function CourseManagePage({ params }: Props) {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left Column */}
         <DashboardCourseCard course={course} />
 

@@ -4,7 +4,8 @@ import { Edit, MoreVertical, Trash } from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
-
+import { Clock, Heart } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,67 +28,46 @@ import Link from "next/link";
 export default function CourseList({ courses }: { courses: ICourse[] }) {
   return (
     <>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Image</TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead>Description</TableHead>
+ 
 
-            <TableHead>Price</TableHead>
-
-            <TableHead className="w-[100px]">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {courses.map((course) => (
-            <TableRow key={course.id}>
-              <TableCell>
-                <Image
-                  src={course.thumbnail || "/placeholder.svg"}
-                  alt={course.title}
-                  width={80}
-                  height={45}
-                  className="rounded-md object-cover"
-                />
-              </TableCell>
-              <TableCell className="font-medium max-w-[200px] truncate">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {courses.map((course) => (
+          <Card className="overflow-hidden border-none col-span-1 shadow-md">
+            <div className={`relative h-48 p-8`}>
+              <div className="absolute inset-0  bg-cover bg-center opacity-50 col-span-3" />
+              <Image
+                src={course.thumbnail}
+                alt={course.title}
+                fill
+                className="relative h-96 object-cover object-center"
+              />
+            </div>
+            <CardHeader className="relative">
+              <div className="flex items-center justify-between"></div>
+              <h3 className="mt-6 text-lg font-semibold text-secondary line-clamp-1">
                 {course.title}
-              </TableCell>
-              <TableCell className="line-clamp-2">
+              </h3>
+              <p className="text-sm text-secondary/80 line-clamp-1">
                 {course.description}
-              </TableCell>
+              </p>
+            </CardHeader>
+            <CardContent className="flex justify-end items-center gap-4">
+              <Link href={`/dashboard/courses/${course.id}`} className="flex items-center">
+                <Edit className="w-4 h-4 mr-2" />
+                Edit
+              </Link>
 
-              <TableCell>${course.price}</TableCell>
+              <DeleteCourseModal courseId={course.id}>
+                <span className="flex justify-center items-center pl-2 text-red-500">
+                  <Trash className="w-4 h-4 mr-2 " /> Delete
+                </span>
+              </DeleteCourseModal>
+            </CardContent>
+          </Card>
+        ))}
 
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreVertical className="w-4 h-4" />
-                      <span className="sr-only">Actions</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <Link href={`/dashboard/courses/${course.id}`} className="flex ">
-                        <Edit className="w-4 h-4 mr-2" />
-                        Edit
-                      </Link>
-                    </DropdownMenuItem>
-
-                    <DeleteCourseModal courseId={course.id}>
-                      <span className="flex justify-center items-center pl-2 text-red-500">
-                        <Trash className="w-4 h-4 mr-2 " /> Delete
-                      </span>
-                    </DeleteCourseModal>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+        {/* <Link  href={`/dashboard/courses/${course.id}`} className="col-span-3"></Link> */}
+      </div>
     </>
   );
 }

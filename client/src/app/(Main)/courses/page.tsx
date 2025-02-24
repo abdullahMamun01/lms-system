@@ -8,11 +8,11 @@ export default async function Courses() {
   const courses = response.data
   
   return (
-    <section className="py-16   bg-gray-50">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-16 bg-gray-50">
+      <div className="max-w-7xl mx-auto lg:px-0 px-4">
         <div className="text-center">
-          <h2 className="mb-4 text-4xl font-bold text-secondary">Our Currently ALL Courses</h2>
-          <p className="mb-8 text-secondary/80">
+          <h2 className="mb-4 text-2xl md:text-4xl font-bold text-secondary">Our Currently ALL Courses</h2>
+          <p className="mb-8  text-secondary/80">
             Choose from hundreds of courses from specialist organizations
           </p>
         </div>
