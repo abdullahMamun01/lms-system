@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 export default function LectureList({ lectures }: { lectures: ILecture[] }) {
   const router = useRouter();
   const pathname = usePathname();
-console.log({lectures})
+
   return (
     <div>
       {lectures.map((lecture, i) => (

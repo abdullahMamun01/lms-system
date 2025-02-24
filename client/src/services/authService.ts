@@ -15,7 +15,7 @@ const login = async (payload: {
 > => {
   const response = await axiosInstance.post(`/auth/signin`, payload);
   const data = await response.data;
-  console.log(data);
+  
   return data;
 };
 

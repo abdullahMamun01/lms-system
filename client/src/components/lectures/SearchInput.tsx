@@ -11,13 +11,11 @@ import { usePathname, useRouter } from "next/navigation";
 
 
 export default function SearchInput({ lectures  }: { lectures: ILecture[] }) {
-    console.log({lectures} , 'from search input');
+
   const [isSearchFocused, setIsSearchFocused] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [filteredLectures, setFilteredLectures] =
     React.useState<ILecture[]>(lectures);
-
-    console.log({filteredLectures})
   const searchContainerRef = React.useRef<HTMLDivElement>(null);
 
   const handleSearch = (query: string) => {

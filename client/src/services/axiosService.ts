@@ -20,7 +20,7 @@ axiosInstance.interceptors.response.use(
     return response
   }, // Successful response
   (error) => {
-    console.log(error.response.data)
+  
     if (error instanceof AxiosError) {
       const errorMessage = error.response?.data?.message
       throw new Error(errorMessage);

@@ -71,7 +71,7 @@ export function LectureForm() {
         token as string,
         formData
       );
-      console.log(update);
+
       if (selectedLecture) {
         const updateLecture = lectures.map((lecture) => {
           if (lecture.id === selectedLecture.id) {

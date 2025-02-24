@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import ModuleTitleForm from "@/components/forms/ModuleTitleForm";
 export default function ModuleTitle({ title }: { title: string }) {
-    console.log(title , 'hello')
+
   const [editTitle, setEditTitel] = useState(false);
 
   const [moduleTitle, setModuleTitile] = useState(title);

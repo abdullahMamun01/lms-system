@@ -33,7 +33,7 @@ export default function EditCourseThumbnail({
       setIsLoading(false);
       toast.success("course updated successfully");
       onUpdate("thumbnail", thumbnail);
-      console.log(thumbnail)
+    
     } catch (error) {
       const err = error as Error;
       toast.error(err.message);

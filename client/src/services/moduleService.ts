@@ -18,7 +18,7 @@ const getModulesByCourse = async (
   courseId: string,
   token: string
 ): Promise<IResponse<IModule[]>> => {
-  console.log(courseId, "from");
+  
   const response = await axiosInstance.get(`/courses/${courseId}/modules`, {
     headers: {
       Authorization: `Bearer ${token}`,

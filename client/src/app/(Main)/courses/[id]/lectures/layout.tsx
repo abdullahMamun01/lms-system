@@ -6,6 +6,7 @@ interface Props {
 }
 export default async function layout({ children , params}: Props) {
   const {id} =await params
+  console.log(await params)
   return (
     <div className="min-h-screen bg-[#0A0B1A] text-white ">
 

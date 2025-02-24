@@ -15,6 +15,7 @@ import {
 import { ILectureWithProgress } from "@/interfaces/lecture.inteface";
 import VideoSkelaton from "@/components/skeleton/VideoSkelaton";
 import { useModuleLectureStore } from "@/store/moduleLecture.store";
+import PdfList from "@/components/lectures/PdfList";
 
 export default function LectureVideoPage({
   params,
@@ -81,21 +82,22 @@ export default function LectureVideoPage({
         <VideoPlay lectureId={lectureId as string} videoUrl={data.videoUrl} />
       )}
 
-      <div className="flex justify-end gap-5">
+      <div className="flex justify-end gap-5 mr-4">
         <Button
           disabled={!data?.previousLession}
           onClick={prevLessionNavigate}
-          className="bg-white text-gray-100"
+          className="bg-secondary hover:bg-secondary/90 text-gray-100"
         >
           Previous
         </Button>
-        <Button
-          onClick={nextLessionNavigate}
-          className="px-8"
-        >
+        <Button onClick={nextLessionNavigate} className="px-8">
           Next
         </Button>
       </div>
+
+      {data?.pdfNotes && data?.pdfNotes?.length > 0 && (
+        <PdfList pdfNotes={data?.pdfNotes as string[]} />
+      )}
     </div>
   );
 }

@@ -25,7 +25,6 @@ export default function DeleteModuleModal({
   const { token } = useAuth();
   const handleDelete = async () => {
     setIsLoading(true);
-    console.log(moduleId , 'dafadsf')
     try {
       await deleteModuleById(moduleId, token as string);
       toast.success("module deleting success");

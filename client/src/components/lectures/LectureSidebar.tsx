@@ -22,9 +22,20 @@ import { ICourseModule, IModule } from "@/interfaces/module.interface";
 import SearchInput from "./SearchInput";
 import { ILecture } from "@/interfaces/lecture.inteface";
 import { useModuleLectureStore } from "@/store/moduleLecture.store";
+import { useParams } from "next/navigation";
+
+function calculateModuleCompletion(
+  currentModule: number,
+  totalModules: number
+): number {
+  if (totalModules === 0) return 0;
+  return (currentModule / totalModules) * 100;
+}
 
 export default function LectureSidebar({ courseId }: { courseId: string }) {
-  const { setModules, modules } = useModuleLectureStore();
+  const params = useParams();
+
+  const { setModules, modules , calculateLectureCompletion , calculateCourseProgress } = useModuleLectureStore();
   const { token } = useAuth();
 
   const { data, isLoading } = useFetch<ICourseModule>(
@@ -36,25 +47,19 @@ export default function LectureSidebar({ courseId }: { courseId: string }) {
     if (!isLoading && data) {
       setModules(data.modules as IModule[]);
     }
-  }, [isLoading, data , setModules]);
+  }, [isLoading, data, setModules]);
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
   const lectures =
-    data?.modules
+    modules
       ?.flatMap((module) => module.lectures)
       .filter((lecture) => lecture?.completed) || [];
-  const totalCompleteModule = data?.modules?.filter(
-    (module) =>
-      module.lectures?.every(
-        (lecture) => Boolean(lecture?.completed) === true
-      ) && module.lectures?.length > 0
-  );
+  const lectureProgress = calculateCourseProgress()
+ const {completedLectures ,totalLectures} = calculateLectureCompletion(params.lectureId as string)
 
-  console.log({ totalCompleteModule });
-  console.log(totalCompleteModule);
   return (
     <div className="bg-[#1A1B2E] rounded-lg p-4">
       <div className="space-y-4">
@@ -62,8 +67,11 @@ export default function LectureSidebar({ courseId }: { courseId: string }) {
           <div>Running Module:</div>
 
           <div className="flex justify-center items-center gap-2">
-            <Progress value={10} className="w-32 bg-primary/20" />
-            <div className="text-right">{totalCompleteModule?.length}/13</div>
+            <Progress value={lectureProgress} className="w-32 bg-primary/20" />
+            <div className="text-right">
+              {completedLectures || 0}/
+              {totalLectures}
+            </div>
           </div>
         </div>
         <SearchInput lectures={lectures as ILecture[]} />

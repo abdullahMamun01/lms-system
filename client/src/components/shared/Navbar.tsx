@@ -1,10 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import AuthMenu from "../auth/AuthMenu";
+import { MobileNav } from "./MobileNav";
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 w-full border-b bg-background/95 z- backdrop-blur supports-[backdrop-filter]:bg-background/60 z-[999] ">
+    <header className="sticky top-0 w-full border-b bg-background/95 z-[99] backdrop-blur supports-[backdrop-filter]:bg-background/60 isolation-isolate">
+
       <nav className="container flex h-16 items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-[">
@@ -30,7 +32,12 @@ export default function Navbar() {
             Community
           </a>
         </div>
-        <AuthMenu />
+        <div className="hidden md:flex">
+          <AuthMenu />
+        </div>
+        <div className="  md:hidden z-[99]">
+          <MobileNav />
+        </div>
       </nav>
     </header>
   );
